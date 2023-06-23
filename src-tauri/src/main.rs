@@ -3,7 +3,6 @@
 
 use std::process::Command;
 
-
 fn main() {
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![ffgif])
@@ -24,7 +23,6 @@ fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
   const FPS: u8 = 10;
   const RESOLUTION: u16 = 720;
 
-  // let input_file = "../public/lightning-guardian.mp4";
   let output_file = format!("{}.gif", input_file);
   let video_filter = format!("fps={},scale={}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse", FPS, RESOLUTION);
   Command::new(FFMPEG_PATH)
@@ -33,7 +31,7 @@ fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
     &start_time.to_string(),
     "-t",
     &duration.to_string(),
-    "-y", // Overide
+    "-y", // Override 
     "-i",
     &input_file,
     "-vf",
@@ -42,6 +40,6 @@ fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
   ])
   .spawn()
   .expect("failed to execute process");
- 
+  
   output_file.into()
 }

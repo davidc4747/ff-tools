@@ -12,6 +12,10 @@
     },
     "tauri": {
         "allowlist": {
+            "protocol": {
+                "asset": true,
+                "assetScope": ["**/*.gif", "**/*.mp4", "**/*.mp3"]
+            },
             "dialog": {
                 "open": true
             }
@@ -50,7 +54,7 @@
             }
         },
         "security": {
-            "csp": null
+            "csp": "default-src 'self'; media-src 'self' asset: https://asset.localhost; img-src 'self' asset: https://asset.localhost"
         },
         "updater": {
             "active": false
@@ -58,10 +62,10 @@
         "windows": [
             {
                 "fullscreen": false,
-                "height": 600,
+                "height": 900,
                 "resizable": true,
                 "title": "ff-tools",
-                "width": 800
+                "width": 1600
             }
         ]
     }
