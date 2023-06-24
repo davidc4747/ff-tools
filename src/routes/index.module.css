@@ -1,0 +1,50 @@
+/* ======================== *\
+    #Preview Pane
+\* ======================== */
+
+.previewPane {
+    display: flex;
+    justify-content: space-around;
+
+    padding: 2rem 1rem;
+}
+
+.preview {
+    border: 1px solid var(--black);
+}
+
+/* ======================== *\
+    #Form
+\* ======================== */
+
+.form {
+    padding: 1rem;
+    display: grid;
+    gap: 1rem;
+    grid: 1fr 1fr 1fr / 1fr 1fr;
+    grid-template-areas:
+        "progress progress"
+        "select select"
+        "start duration"
+        ". submit";
+
+    place-items: center end;
+}
+
+.progress {
+    grid-area: progress;
+    width: 100%;
+}
+
+.selectVideo {
+    grid-area: select;
+}
+.start {
+    grid-area: start;
+}
+.duration {
+    grid-area: duration;
+}
+.submit {
+    grid-area: submit;
+}

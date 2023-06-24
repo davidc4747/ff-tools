@@ -1,0 +1,14 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    padding: 1rem;
+
+    color: var(--text-inverted);
+    background-color: var(--dark-grey);
+}
+
+.sidebar > a {
+    color: var(--text-inverted);
+}
