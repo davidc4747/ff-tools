@@ -8,8 +8,8 @@ import {
     selectVideo,
     submit,
 } from "./index.module.css";
-import { invoke, convertFileSrc } from "@tauri-apps/api/tauri";
-import { open } from "@tauri-apps/api/dialog";
+import { openVideoPicker, ffgif } from "~/services/tauri-helpers";
+import { convertFileSrc } from "@tauri-apps/api/tauri";
 
 export default component$(() => {
     const filePath = useSignal("");
@@ -33,39 +33,22 @@ export default component$(() => {
                 class={form}
                 action="#"
                 onSubmit$={async function () {
-                    const outputFilePath = await invoke("ffgif", {
-                        inputFile: filePath.value,
-                        startTime: startTime.value,
-                        duration: duration.value,
-                    });
-                    if (typeof outputFilePath === "string")
-                        outputGif.value = convertFileSrc(outputFilePath);
+                    outputGif.value = await ffgif(
+                        filePath.value,
+                        startTime.value,
+                        duration.value
+                    );
                 }}
             >
                 <progress class={progress} max={1} value={0}></progress>
                 <div class={selectVideo}>
-                    <input class="txt" type="text" />
+                    <input class="txt" type="text" value={filePath.value} />
                     <button
                         class="btn"
+                        type="button"
                         onClick$={async function () {
-                            const file = await open({
-                                multiple: false,
-                                directory: false,
-                                filters: [
-                                    {
-                                        name: "Video",
-                                        extensions: [
-                                            "mp4",
-                                            "avi",
-                                            "mkv",
-                                            "mov",
-                                            "webm",
-                                        ],
-                                    },
-                                ],
-                            });
-
-                            if (file && !Array.isArray(file)) {
+                            const file = await openVideoPicker();
+                            if (file) {
                                 filePath.value = file;
                                 inputPreview.value = convertFileSrc(file);
                             }
