@@ -83,10 +83,9 @@ ol {
 .btn,
 .txt,
 .num {
-    margin: 0.2rem;
     padding: 0.6rem 1.2rem;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
 }
 
 /* ------------------------- *\

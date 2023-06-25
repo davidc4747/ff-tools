@@ -1,0 +1,20 @@
+/* ======================== *\
+    #Video Picker
+\* ======================== */
+
+.videoPicker {
+    display: flex;
+
+    & > .file {
+        flex-grow: 1;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+
+        color: var(--black);
+    }
+
+    & > .browse {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}

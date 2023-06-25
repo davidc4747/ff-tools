@@ -8,7 +8,8 @@ import {
     selectVideo,
     submit,
 } from "./index.module.css";
-import { openVideoPicker, ffgif } from "~/services/tauri-helpers";
+import VideoPicker from "~/components/video-picker/video-picker";
+import { ffgif } from "~/services/tauri-helpers";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 
 export default component$(() => {
@@ -17,6 +18,7 @@ export default component$(() => {
     const outputGif = useSignal("");
     const startTime = useSignal(0);
     const duration = useSignal(0);
+
     return (
         <main>
             <section class={previewPane}>
@@ -41,22 +43,15 @@ export default component$(() => {
                 }}
             >
                 <progress class={progress} max={1} value={0}></progress>
-                <div class={selectVideo}>
-                    <input class="txt" type="text" value={filePath.value} />
-                    <button
-                        class="btn"
-                        type="button"
-                        onClick$={async function () {
-                            const file = await openVideoPicker();
-                            if (file) {
-                                filePath.value = file;
-                                inputPreview.value = convertFileSrc(file);
-                            }
-                        }}
-                    >
-                        Select Video
-                    </button>
-                </div>
+                <VideoPicker
+                    class={selectVideo}
+                    onChange$={(file: string | null) => {
+                        if (file) {
+                            filePath.value = file;
+                            inputPreview.value = convertFileSrc(file);
+                        }
+                    }}
+                />
 
                 <label>
                     Start Time:{" "}
@@ -64,6 +59,7 @@ export default component$(() => {
                         class="num"
                         type="number"
                         value={startTime.value}
+                        onChange$={(e) => (startTime.value = +e.target.value)}
                     ></input>
                 </label>
                 <label>
@@ -72,6 +68,7 @@ export default component$(() => {
                         class="num"
                         type="number"
                         value={duration.value}
+                        onChange$={(e) => (duration.value = +e.target.value)}
                     ></input>
                 </label>
                 <input class={["btn", submit]} type="submit" />

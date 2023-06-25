@@ -38,6 +38,7 @@
 
 .selectVideo {
     grid-area: select;
+    justify-self: stretch;
 }
 .start {
     grid-area: start;

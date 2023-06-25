@@ -1,5 +1,6 @@
 import { invoke, convertFileSrc } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog";
+import { normalize } from "@tauri-apps/api/path";
 
 /* ======================== *\
     #Commands
@@ -11,7 +12,7 @@ export async function ffgif(
     duration: number
 ): Promise<string> {
     const outputFilePath = await invoke("ffgif", {
-        inputFile: inputFile,
+        inputFile: await normalize(inputFile),
         startTime: startTime,
         duration: duration,
     });
