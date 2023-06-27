@@ -1,4 +1,4 @@
-import { component$, useStore } from "@builder.io/qwik";
+import { component$, useSignal, useStore, useTask$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import {
     main,
@@ -30,6 +30,7 @@ type Store = {
 };
 
 export default component$(() => {
+    const outputElem = useSignal<HTMLImageElement>();
     const store = useStore<Store>({
         startTime: 0,
         duration: 0,
@@ -44,6 +45,16 @@ export default component$(() => {
             path: "",
             url: "",
         },
+    });
+
+    useTask$(({ track }) => {
+        track(() => outputElem.value);
+        const img = outputElem.value;
+        if (img) {
+            img.onload = function () {
+                img.scrollIntoView({ behavior: "smooth" });
+            };
+        }
     });
 
     return (
@@ -103,19 +114,22 @@ export default component$(() => {
                         onChange$={(e) => (store.duration = +e.target.value)}
                     ></input>
                 </label>
-                <button class="btn">Submit</button>
+                <button class="btn" disabled={store.outputStatus === "Loading"}>
+                    {store.outputStatus === "Loading" ? "Loading..." : "Submit"}
+                </button>
             </form>
 
             {store.output.url && (
                 <>
-                    <p>{store.output.path}</p>
                     <img
+                        ref={outputElem}
                         class={outputPreview}
                         src={store.output.url}
                         alt="output Gif"
                         width={480}
                         height={undefined}
                     />
+                    <p>{store.output.path}</p>
                 </>
             )}
         </main>
