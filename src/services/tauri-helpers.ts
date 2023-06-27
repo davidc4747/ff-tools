@@ -1,4 +1,4 @@
-import { invoke, convertFileSrc } from "@tauri-apps/api/tauri";
+import { invoke } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog";
 import { normalize } from "@tauri-apps/api/path";
 
@@ -17,7 +17,7 @@ export async function ffgif(
         duration: duration,
     });
     if (typeof outputFilePath === "string") {
-        return convertFileSrc(outputFilePath);
+        return outputFilePath;
     } else {
         return "";
     }

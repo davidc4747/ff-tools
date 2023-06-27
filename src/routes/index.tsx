@@ -1,4 +1,4 @@
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$, useStore } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import {
     main,
@@ -11,42 +11,74 @@ import VideoPicker from "~/components/video-picker/video-picker";
 import { ffgif } from "~/services/tauri-helpers";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 
-// type PreviewState = "Initial" | "Loading" | "Ready";
+type OutputStatus = "Initial" | "Loading" | "Ready";
+
+type Store = {
+    startTime: number;
+    duration: number;
+
+    input: {
+        path: string;
+        url: string;
+    };
+
+    outputStatus: OutputStatus;
+    output: {
+        path: string;
+        url: string;
+    };
+};
 
 export default component$(() => {
-    const inputPath = useSignal("");
-    const inputUrl = useSignal("");
+    const store = useStore<Store>({
+        startTime: 0,
+        duration: 0,
 
-    const outputUrl = useSignal("");
+        input: {
+            path: "",
+            url: "",
+        },
 
-    const startTime = useSignal(0);
-    const duration = useSignal(0);
+        outputStatus: "Initial",
+        output: {
+            path: "",
+            url: "",
+        },
+    });
 
     return (
         <main class={main}>
             <video
                 class={inputVideo}
-                controls={!!inputUrl.value}
-                src={inputUrl.value}
+                controls={!!store.input.url}
+                src={store.input.url}
             ></video>
             <form
                 class={form}
                 preventdefault:submit
                 onSubmit$={async function () {
-                    outputUrl.value = "";
-                    outputUrl.value = await ffgif(
-                        inputPath.value,
-                        startTime.value,
-                        duration.value
+                    // Clear Data
+                    store.output.path = "";
+                    store.output.url = "";
+                    store.outputStatus = "Loading";
+
+                    // Wait for ffmpeg to procces the vide
+                    const path = await ffgif(
+                        store.input.path,
+                        store.startTime,
+                        store.duration
                     );
+                    store.output.path = path;
+                    store.output.url = convertFileSrc(path);
+                    store.outputStatus = "Ready";
                 }}
             >
                 <VideoPicker
                     class={videoPicker}
                     onChange$={(file: string | null) => {
                         if (file) {
-                            inputPath.value = file;
-                            inputUrl.value = convertFileSrc(file);
+                            store.input.path = file;
+                            store.input.url = convertFileSrc(file);
                         }
                     }}
                 />
@@ -57,8 +89,8 @@ export default component$(() => {
                         class="num"
                         type="number"
                         min={0}
-                        value={startTime.value}
-                        onChange$={(e) => (startTime.value = +e.target.value)}
+                        value={store.startTime}
+                        onChange$={(e) => (store.startTime = +e.target.value)}
                     ></input>
                 </label>
                 <label>
@@ -67,21 +99,20 @@ export default component$(() => {
                         class="num"
                         type="number"
                         min={0}
-                        value={duration.value}
-                        onChange$={(e) => (duration.value = +e.target.value)}
+                        value={store.duration}
+                        onChange$={(e) => (store.duration = +e.target.value)}
                     ></input>
                 </label>
                 <button class="btn">Submit</button>
             </form>
 
-            {outputUrl.value && (
+            {store.output.url && (
                 <>
-                    {/* <h1>Output</h1> */}
-                    <p>{inputPath.value}</p>
+                    <p>{store.output.path}</p>
                     <img
                         class={outputPreview}
-                        src={outputUrl.value}
-                        alt=""
+                        src={store.output.url}
+                        alt="output Gif"
                         width={480}
                         height={undefined}
                     />
