@@ -1,9 +1,9 @@
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
-import { sidebar } from "./side-bar.module.css";
+import { navigation } from "./navigation.module.css";
 
-const SideBar = component$(() => (
-    <nav class={sidebar}>
+const Navigation = component$(() => (
+    <nav class={navigation}>
         <Link href="/">Convert a Gif</Link>
         <Link href="/">Minify Video</Link>
         <Link href="/">Audio Only</Link>
@@ -11,4 +11,4 @@ const SideBar = component$(() => (
     </nav>
 ));
 
-export default SideBar;
+export default Navigation;

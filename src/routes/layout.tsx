@@ -1,7 +1,6 @@
 import { component$, Slot } from "@builder.io/qwik";
 import { type RequestHandler } from "@builder.io/qwik-city";
-import { layout } from "./layout.module.css";
-import SideBar from "../components/side-bar/side-bar";
+import Navigation from "../components/navigation/navigation";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
     // Control caching for this request for best performance and to reduce hosting costs:
@@ -16,9 +15,9 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 
 export default component$(() => {
     return (
-        <div class={layout}>
-            <SideBar />
+        <>
+            <Navigation />
             <Slot />
-        </div>
+        </>
     );
 });

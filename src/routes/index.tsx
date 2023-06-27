@@ -1,54 +1,52 @@
 import { component$, useSignal } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import {
+    main,
+    inputVideo,
+    outputPreview,
     form,
-    preview,
-    previewPane,
-    progress,
-    selectVideo,
-    submit,
+    videoPicker,
 } from "./index.module.css";
 import VideoPicker from "~/components/video-picker/video-picker";
 import { ffgif } from "~/services/tauri-helpers";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 
+// type PreviewState = "Initial" | "Loading" | "Ready";
+
 export default component$(() => {
-    const filePath = useSignal("");
-    const inputPreview = useSignal("");
-    const outputGif = useSignal("");
+    const inputPath = useSignal("");
+    const inputUrl = useSignal("");
+
+    const outputUrl = useSignal("");
+
     const startTime = useSignal(0);
     const duration = useSignal(0);
 
     return (
-        <main>
-            <section class={previewPane}>
-                <video controls width={480} src={inputPreview.value}></video>
-                <img
-                    class={preview}
-                    src={outputGif.value}
-                    alt=""
-                    width={480}
-                    height={undefined}
-                />
-            </section>
+        <main class={main}>
+            <video
+                class={inputVideo}
+                controls={!!inputUrl.value}
+                src={inputUrl.value}
+            ></video>
             <form
                 class={form}
-                action="#"
+                preventdefault:submit
                 onSubmit$={async function () {
-                    outputGif.value = await ffgif(
-                        filePath.value,
+                    outputUrl.value = "";
+                    outputUrl.value = await ffgif(
+                        inputPath.value,
                         startTime.value,
                         duration.value
                     );
                 }}
             >
-                <progress class={progress} max={1} value={0}></progress>
                 <VideoPicker
-                    class={selectVideo}
+                    class={videoPicker}
                     onChange$={(file: string | null) => {
                         if (file) {
-                            filePath.value = file;
-                            inputPreview.value = convertFileSrc(file);
+                            inputPath.value = file;
+                            inputUrl.value = convertFileSrc(file);
                         }
                     }}
                 />
@@ -58,6 +56,7 @@ export default component$(() => {
                     <input
                         class="num"
                         type="number"
+                        min={0}
                         value={startTime.value}
                         onChange$={(e) => (startTime.value = +e.target.value)}
                     ></input>
@@ -67,12 +66,27 @@ export default component$(() => {
                     <input
                         class="num"
                         type="number"
+                        min={0}
                         value={duration.value}
                         onChange$={(e) => (duration.value = +e.target.value)}
                     ></input>
                 </label>
-                <input class={["btn", submit]} type="submit" />
+                <button class="btn">Submit</button>
             </form>
+
+            {outputUrl.value && (
+                <>
+                    {/* <h1>Output</h1> */}
+                    <p>{inputPath.value}</p>
+                    <img
+                        class={outputPreview}
+                        src={outputUrl.value}
+                        alt=""
+                        width={480}
+                        height={undefined}
+                    />
+                </>
+            )}
         </main>
     );
 });

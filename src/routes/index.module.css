@@ -1,15 +1,20 @@
+.main {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 1rem;
+}
+
 /* ======================== *\
     #Preview Pane
 \* ======================== */
 
-.previewPane {
-    display: flex;
-    justify-content: space-around;
-
-    padding: 2rem 1rem;
-}
-
-.preview {
+.inputVideo,
+.outputPreview {
+    width: 100%;
+    min-width: 480px;
     border: 1px solid var(--black);
 }
 
@@ -18,34 +23,12 @@
 \* ======================== */
 
 .form {
-    padding: 1rem;
-    display: grid;
     gap: 1rem;
-    grid: 1fr 1fr 1fr / 1fr 1fr;
-    grid-template-areas:
-        "progress progress"
-        "select select"
-        "start duration"
-        ". submit";
-
-    place-items: center end;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.progress {
-    grid-area: progress;
+.videoPicker {
     width: 100%;
-}
-
-.selectVideo {
-    grid-area: select;
-    justify-self: stretch;
-}
-.start {
-    grid-area: start;
-}
-.duration {
-    grid-area: duration;
-}
-.submit {
-    grid-area: submit;
 }

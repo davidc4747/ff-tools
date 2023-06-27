@@ -1,0 +1,23 @@
+.navigation {
+    display: flex;
+    gap: 0.3rem;
+    justify-content: space-around;
+    text-align: center;
+
+    position: sticky;
+
+    color: var(--text-inverted);
+    background-color: var(--dark-grey);
+
+    & > a {
+        padding: 1rem 0.3rem;
+        border-bottom: 5px solid transparent;
+        color: var(--text-inverted);
+
+        &.selected,
+        &:hover,
+        &:focus {
+            border-bottom-color: var(--primary-100);
+        }
+    }
+}

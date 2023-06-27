@@ -65,10 +65,10 @@
         "windows": [
             {
                 "fullscreen": false,
-                "height": 600,
+                "width": 600,
+                "height": 500,
                 "resizable": true,
-                "title": "ff-tools",
-                "width": 1250
+                "title": "ff-tools"
             }
         ]
     }
