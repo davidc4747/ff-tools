@@ -39,5 +39,9 @@ fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
         .output()
         .expect("failed to execute process");
 
+    // match fs::read(output_file) {
+    //     Ok(buf) => buf,
+    //     Err(_error) => vec![],
+    // }
     output_file.into()
 }

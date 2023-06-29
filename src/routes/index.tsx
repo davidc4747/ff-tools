@@ -8,7 +8,7 @@ import {
     videoPicker,
 } from "./index.module.css";
 import VideoPicker from "~/components/video-picker/video-picker";
-import { ffgif } from "~/services/tauri-helpers";
+import { ffgif, createFileURL } from "~/services/tauri-helpers";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 
 type OutputStatus = "Initial" | "Loading" | "Ready";
@@ -80,7 +80,7 @@ export default component$(() => {
                         store.duration
                     );
                     store.output.path = path;
-                    store.output.url = convertFileSrc(path);
+                    store.output.url = await createFileURL(path);
                     store.outputStatus = "Ready";
                 }}
             >
@@ -119,7 +119,7 @@ export default component$(() => {
                 </button>
             </form>
 
-            {store.output.url && (
+            {store.outputStatus === "Ready" && (
                 <>
                     <img
                         ref={outputElem}

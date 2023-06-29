@@ -14,13 +14,34 @@
         "allowlist": {
             "protocol": {
                 "asset": true,
-                "assetScope": ["**/*.gif", "**/*.mp4", "**/*.mp3"]
+                "assetScope": [
+                    "**/*.mp4",
+                    "**/*.mp3",
+                    "**/*.avi",
+                    "**/*.mkv",
+                    "**/*.mov",
+                    "**/*.webm"
+                ]
             },
             "dialog": {
                 "open": true
             },
             "path": {
                 "all": true
+            },
+            "fs": {
+                "readFile": true,
+                "scope": [
+                    "**/*.png",
+                    "**/*.jpg",
+                    "**/*.gif",
+                    "**/*.mp4",
+                    "**/*.mp3",
+                    "**/*.avi",
+                    "**/*.mkv",
+                    "**/*.mov",
+                    "**/*.webm"
+                ]
             }
         },
         "bundle": {

@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog";
 import { normalize } from "@tauri-apps/api/path";
+import { readBinaryFile } from "@tauri-apps/api/fs";
 
 /* ======================== *\
     #Commands
@@ -24,7 +25,7 @@ export async function ffgif(
 }
 
 /* ======================== *\
-    #Dialog
+    #Local Files
 \* ======================== */
 
 export async function openVideoPicker(): Promise<string | null> {
@@ -44,4 +45,12 @@ export async function openVideoPicker(): Promise<string | null> {
     } else {
         return file;
     }
+}
+
+export async function createFileURL(path: string): Promise<string> {
+    const arrayBuffer = await readBinaryFile(path);
+    const blob = new Blob([new Uint8Array(arrayBuffer)], {
+        type: "image/gif",
+    });
+    return URL.createObjectURL(blob);
 }
