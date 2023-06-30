@@ -1,7 +1,6 @@
 import { component$, useSignal, useStore, useTask$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import {
-    main,
     inputVideo,
     outputPreview,
     form,
@@ -58,7 +57,7 @@ export default component$(() => {
     });
 
     return (
-        <main class={main}>
+        <>
             <video
                 class={inputVideo}
                 controls={!!store.input.url}
@@ -132,7 +131,7 @@ export default component$(() => {
                     <p>{store.output.path}</p>
                 </>
             )}
-        </main>
+        </>
     );
 });
 

@@ -2,6 +2,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog";
 import { normalize } from "@tauri-apps/api/path";
 import { readBinaryFile } from "@tauri-apps/api/fs";
+import type { Resolution } from "~/services/types";
 
 /* ======================== *\
     #Commands
@@ -16,6 +17,23 @@ export async function ffgif(
         inputFile: await normalize(inputFile),
         startTime: startTime,
         duration: duration,
+    });
+    if (typeof outputFilePath === "string") {
+        return outputFilePath;
+    } else {
+        return "";
+    }
+}
+
+export async function ffmin(
+    inputFile: string,
+    resolution: Resolution,
+    fps: number = 60
+): Promise<string> {
+    const outputFilePath = await invoke("ffmin", {
+        inputFile: await normalize(inputFile),
+        resolution: resolution,
+        fps: fps,
     });
     if (typeof outputFilePath === "string") {
         return outputFilePath;

@@ -5,10 +5,14 @@ use std::process::Command;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![ffgif])
+        .invoke_handler(tauri::generate_handler![ffgif, ffmin])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
+
+/* ======================== *\
+    #FFmpeg Commands
+\* ======================== */
 
 const FFMPEG_PATH: &str = "../public/ffmpeg";
 // const FFPROBE_PATH: &str =  "../public/ffprobe";
@@ -37,11 +41,33 @@ fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
             &output_file,
         ])
         .output()
-        .expect("failed to execute process");
+        .expect("failed to execute ffmpeg command");
 
-    // match fs::read(output_file) {
-    //     Ok(buf) => buf,
-    //     Err(_error) => vec![],
-    // }
+    output_file.into()
+}
+
+#[tauri::command]
+fn ffmin(input_file: &str, resolution: &str, fps: u8) -> String {
+    println!("{} {} {}", input_file, resolution, fps);
+    let output_file = format!("{}.min.mp4", input_file);
+    Command::new(FFMPEG_PATH)
+        .args([
+            "-y",
+            "-i",
+            &input_file.to_string(),
+            "-r",
+            &fps.to_string(),
+            "-s",
+            match resolution {
+                "1080" => "hd1080",
+                "720" => "hd720",
+                "480" => "hd480",
+                _ => "",
+            },
+            &output_file.to_string(),
+        ])
+        .output()
+        .expect("failed to execute ffmpeg command");
+
     output_file.into()
 }
