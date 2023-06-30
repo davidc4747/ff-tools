@@ -10,7 +10,7 @@
     background-color: var(--dark-grey);
 
     & > a {
-        padding: 1rem 0.3rem;
+        padding: 0.7rem 0.3rem;
         border-bottom: 5px solid transparent;
         color: var(--text-inverted);
 

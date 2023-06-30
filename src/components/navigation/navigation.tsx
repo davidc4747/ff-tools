@@ -4,10 +4,10 @@ import { navigation } from "./navigation.module.css";
 
 const Navigation = component$(() => (
     <nav class={navigation}>
-        <Link href="/">Convert a Gif</Link>
+        <Link href="/ffgif">Convert a Gif</Link>
         <Link href="/ffmin">Minify Video</Link>
-        <Link href="/">Audio Only</Link>
-        <Link href="/">Compressed Dialog</Link>
+        <Link href="/ffaudio">Audio Only</Link>
+        <Link href="/compressed-dialog">Compressed Dialog</Link>
     </nav>
 ));
 
