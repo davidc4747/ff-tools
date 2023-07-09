@@ -1,14 +1,38 @@
 import { component$ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
-import { navigation } from "./navigation.module.css";
+import { Link, useLocation } from "@builder.io/qwik-city";
+import { navigation, lnk, selected } from "./navigation.module.css";
 
-const Navigation = component$(() => (
-    <nav class={navigation}>
-        <Link href="/ffgif">Convert a Gif</Link>
-        <Link href="/ffmin">Minify Video</Link>
-        <Link href="/ffaudio">Audio Only</Link>
-        <Link href="/compressed-dialog">Compressed Dialog</Link>
-    </nav>
-));
+type NavLink = {
+    href: string;
+    text: string;
+};
+
+const Navigation = component$(() => {
+    const { url } = useLocation();
+
+    const allLinks: NavLink[] = [
+        { href: "/ffgif", text: "Convert a Gif" },
+        { href: "/ffmin", text: "Minify Video" },
+        { href: "/ffaudio", text: "Audio Only" },
+        // { href: "/compressed-dialog", text: "Compressed Dialog" },
+    ];
+
+    return (
+        <nav class={navigation} onClick$={() => console.log(url.pathname)}>
+            {allLinks.map(({ href, text }, index) => (
+                <Link
+                    key={index}
+                    class={{
+                        [lnk]: true,
+                        [selected]: url.pathname.startsWith(href),
+                    }}
+                    href={href}
+                >
+                    {text}
+                </Link>
+            ))}
+        </nav>
+    );
+});
 
 export default Navigation;

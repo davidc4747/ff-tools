@@ -1,23 +1,25 @@
 .navigation {
+    padding: 0 1rem;
+
     display: flex;
-    gap: 0.3rem;
-    justify-content: space-around;
+    /* gap: 1rem; */
     text-align: center;
 
     position: sticky;
 
     color: var(--text-inverted);
     background-color: var(--grey-400);
+}
 
-    & > a {
-        padding: 0.7rem 0.3rem;
-        border-bottom: 5px solid transparent;
-        color: var(--text-inverted);
-
-        &.selected,
-        &:hover,
-        &:focus {
-            border-bottom-color: var(--primary-100);
-        }
-    }
+.lnk {
+    padding: 0.6rem 1rem;
+    border-bottom: 5px solid transparent;
+    color: var(--text-inverted);
+}
+.lnk:hover,
+.lnk:focus {
+    background-color: var(--grey-600);
+}
+.selected {
+    border-bottom-color: var(--primary-100);
 }
