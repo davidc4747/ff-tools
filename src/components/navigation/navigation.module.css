@@ -7,7 +7,7 @@
     position: sticky;
 
     color: var(--text-inverted);
-    background-color: var(--dark-grey);
+    background-color: var(--grey-400);
 
     & > a {
         padding: 0.7rem 0.3rem;

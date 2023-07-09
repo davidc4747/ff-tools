@@ -23,8 +23,15 @@ html {
 :root {
     --black: #001011;
     --white: #fbfbfb;
-    --dark-grey: #40404e;
-    --light-grey: #707070;
+
+    --grey-100: #707070;
+    --grey-200: #606065;
+    --grey-300: #505059;
+    --grey-400: #40404e;
+    --grey-500: #373945;
+    --grey-600: #2e323d;
+    --grey-700: #252b34;
+    --grey-800: #1b252b;
 
     --primary-100: #97c8eb;
     --primary-200: #64e9ee;
@@ -33,7 +40,7 @@ html {
 
     --text: var(--black);
     --text-inverted: var(--white);
-    --background: var(--light-grey);
+    --background: var(--grey-100);
 }
 
 /* ======================== *\
@@ -49,7 +56,7 @@ html {
     height: 8px;
 }
 ::-webkit-scrollbar-track {
-    background-color: var(--dark-grey);
+    background-color: var(--grey-400);
 }
 ::-webkit-scrollbar-thumb {
     background-color: var(--primary-100);
@@ -111,14 +118,14 @@ ol {
     font-weight: bold;
 
     color: var(--text-inverted);
-    background-color: var(--dark-grey);
+    background-color: var(--grey-400);
 }
 
 .btn:hover,
 .btn:focus {
     cursor: pointer;
-    color: var(--text);
-    background: var(--primary-100);
+    color: var(--text-inverted);
+    background-color: var(--grey-600);
     transition: color 250ms ease-out, background-color 250ms ease-out;
 }
 
