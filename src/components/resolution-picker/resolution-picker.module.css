@@ -3,4 +3,59 @@
 \* ======================== */
 
 .resolutionPicker {
+    display: flex;
+    gap: 2px;
+
+    /* Normalize */
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* ------------------------ *\
+    #Label
+\* ------------------------ */
+
+.lbl {
+    flex-grow: 1;
+    border: 1px solid transparent;
+    padding: 0.6rem 1.2rem;
+    text-align: center;
+
+    cursor: pointer;
+    color: var(--text-inverted);
+    background-color: var(--grey-400);
+
+    transition: 250ms background-color ease-out, 250ms color ease-out,
+        250ms font-weight ease-out;
+}
+.lbl:first-child {
+    border-radius: 6px 0 0 6px;
+}
+.lbl:last-child {
+    border-radius: 0 6px 6px 0;
+}
+.lbl:hover,
+.lbl:focus {
+    background-color: var(--grey-600);
+}
+.lbl:has(> .rdo:checked) {
+    /* font-weight: bold; */
+    background-color: var(--grey-800);
+}
+.lbl:has(> .rdo:focus) {
+    border-color: var(--white);
+}
+
+/* ------------------------ *\
+    #Radio Button
+\* ------------------------ */
+
+.rdo {
+    padding: 0.5rem;
+
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    position: absolute;
 }
