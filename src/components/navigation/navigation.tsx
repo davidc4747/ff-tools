@@ -11,9 +11,9 @@ const Navigation = component$(() => {
     const { url } = useLocation();
 
     const allLinks: NavLink[] = [
-        { href: "/ffgif", text: "Convert a Gif" },
-        { href: "/ffmin", text: "Minify Video" },
-        { href: "/ffaudio", text: "Audio Only" },
+        { href: "/", text: "Convert a Gif" },
+        { href: "/ffmin/", text: "Minify Video" },
+        { href: "/ffaudio/", text: "Audio Only" },
         // { href: "/compressed-dialog", text: "Compressed Dialog" },
     ];
 
@@ -24,7 +24,7 @@ const Navigation = component$(() => {
                     key={index}
                     class={{
                         [lnk]: true,
-                        [selected]: url.pathname.startsWith(href),
+                        [selected]: url.pathname === href,
                     }}
                     href={href}
                 >
