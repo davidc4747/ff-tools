@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::process::Command;
+use std::{path::Path, process::Command};
 
 fn main() {
     tauri::Builder::default()
@@ -22,7 +22,7 @@ fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
     const FPS: u8 = 10;
     const RESOLUTION: u16 = 720;
 
-    let output_file = format!("{}.gif", input_file);
+    let output_file = replace_extention(input_file, "gif");
     let video_filter = format!(
         "fps={},scale={}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse",
         FPS, RESOLUTION
@@ -48,8 +48,7 @@ fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
 
 #[tauri::command]
 fn ffmin(input_file: &str, resolution: &str, fps: u8) -> String {
-    println!("{} {} {}", input_file, resolution, fps);
-    let output_file = format!("{}.min.mp4", input_file);
+    let output_file = replace_extention(input_file, "min.mp4");
     Command::new(FFMPEG_PATH)
         .args([
             "-y",
@@ -70,4 +69,16 @@ fn ffmin(input_file: &str, resolution: &str, fps: u8) -> String {
         .expect("failed to execute ffmpeg command");
 
     output_file.into()
+}
+
+/* ------------------------ *\
+    #Helpers
+\* ------------------------ */
+
+fn replace_extention(file_path: &str, new_extention: &str) -> String {
+    Path::new(file_path)
+        .with_extension(new_extention)
+        .to_str()
+        .unwrap_or_default()
+        .into()
 }
