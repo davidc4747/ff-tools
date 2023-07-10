@@ -20,28 +20,44 @@ const FFMPEG_PATH: &str = "../public/ffmpeg";
 #[tauri::command]
 fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
     const FPS: u8 = 10;
-    const RESOLUTION: u16 = 720;
+    const RESOLUTION: u16 = 480;
 
     let output_file = replace_extention(input_file, "gif");
     let video_filter = format!(
         "fps={},scale={}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse",
         FPS, RESOLUTION
     );
-    Command::new(FFMPEG_PATH)
-        .args([
-            "-ss",
-            &start_time.to_string(),
-            "-t",
-            &duration.to_string(),
-            "-y", // Override
-            "-i",
-            &input_file,
-            "-vf",
-            &video_filter,
-            &output_file,
-        ])
-        .output()
-        .expect("failed to execute ffmpeg command");
+
+    // IF Both values are 0 Just use the Full Length
+    if start_time == 0 && duration == 0 {
+        Command::new(FFMPEG_PATH)
+            .args([
+                "-y", // Override
+                "-i",
+                &input_file,
+                "-vf",
+                &video_filter,
+                &output_file,
+            ])
+            .output()
+            .expect("failed to execute ffmpeg command");
+    } else {
+        Command::new(FFMPEG_PATH)
+            .args([
+                "-ss",
+                &start_time.to_string(),
+                "-t",
+                &duration.to_string(),
+                "-y", // Override
+                "-i",
+                &input_file,
+                "-vf",
+                &video_filter,
+                &output_file,
+            ])
+            .output()
+            .expect("failed to execute ffmpeg command");
+    }
 
     output_file.into()
 }
