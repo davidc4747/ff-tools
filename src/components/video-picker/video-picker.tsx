@@ -4,7 +4,7 @@ import {
     component$,
     useSignal,
 } from "@builder.io/qwik";
-import { openVideoPicker } from "~/services/tauri-helpers";
+import { open } from "@tauri-apps/api/dialog";
 import type { JSX } from "@builder.io/qwik/jsx-runtime";
 import { videoPicker, file, browse } from "./video-picker.module.css";
 
@@ -42,3 +42,26 @@ const VideoPicker = component$((props: PropTypes): JSX.Element => {
 });
 
 export default VideoPicker;
+
+/* ------------------------ *\
+    #Helpers
+\* ------------------------ */
+
+async function openVideoPicker(): Promise<string | null> {
+    const file = await open({
+        multiple: false,
+        directory: false,
+        filters: [
+            {
+                name: "Video",
+                extensions: ["mp4", "avi", "mkv", "mov", "webm"],
+            },
+        ],
+    });
+
+    if (Array.isArray(file)) {
+        return file[0] ?? null;
+    } else {
+        return file;
+    }
+}

@@ -1,6 +1,4 @@
 import { invoke } from "@tauri-apps/api/tauri";
-import { open } from "@tauri-apps/api/dialog";
-import { normalize } from "@tauri-apps/api/path";
 import { readBinaryFile } from "@tauri-apps/api/fs";
 import type { Resolution } from "~/services/types";
 
@@ -14,15 +12,11 @@ export async function ffgif(
     duration: number
 ): Promise<string> {
     const outputFilePath = await invoke("ffgif", {
-        inputFile: await normalize(inputFile),
-        startTime: startTime,
-        duration: duration,
+        inputFile,
+        startTime,
+        duration,
     });
-    if (typeof outputFilePath === "string") {
-        return outputFilePath;
-    } else {
-        return "";
-    }
+    return typeof outputFilePath === "string" ? outputFilePath : "";
 }
 
 export async function ffmin(
@@ -31,44 +25,35 @@ export async function ffmin(
     fps: number = 60
 ): Promise<string> {
     const outputFilePath = await invoke("ffmin", {
-        inputFile: await normalize(inputFile),
-        resolution: resolution,
-        fps: fps,
+        inputFile,
+        resolution,
+        fps,
     });
-    if (typeof outputFilePath === "string") {
-        return outputFilePath;
-    } else {
-        return "";
-    }
+    return typeof outputFilePath === "string" ? outputFilePath : "";
+}
+
+export async function ffaudioOnly(inputFile: string): Promise<string> {
+    const outputFilePath = await invoke("ffaudio_only", { inputFile });
+    return typeof outputFilePath === "string" ? outputFilePath : "";
 }
 
 /* ======================== *\
     #Local Files
 \* ======================== */
 
-export async function openVideoPicker(): Promise<string | null> {
-    const file = await open({
-        multiple: false,
-        directory: false,
-        filters: [
-            {
-                name: "Video",
-                extensions: ["mp4", "avi", "mkv", "mov", "webm"],
-            },
-        ],
-    });
-
-    if (Array.isArray(file)) {
-        return file[0] ?? null;
-    } else {
-        return file;
-    }
-}
-
-export async function createFileURL(path: string): Promise<string> {
+/** Uses the File Binary to create a URL.
+ *  This allows us to create new URLs as the File is updated
+ *  (unlike tauri's convertFileSrc() function)
+ * @param {string} path - Absolute path to the file you want to use
+ * @param {string} type - MIME type of the file
+ */
+export async function createFileURL(
+    path: string,
+    type: string = "" //"image/gif"
+): Promise<string> {
     const arrayBuffer = await readBinaryFile(path);
     const blob = new Blob([new Uint8Array(arrayBuffer)], {
-        type: "image/gif",
+        type,
     });
     return URL.createObjectURL(blob);
 }
