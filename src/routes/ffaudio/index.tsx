@@ -1,16 +1,65 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStore } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import VideoPicker from "~/components/video-picker/video-picker";
+import { ffaudioOnly, createFileURL } from "~/services/tauri-helpers";
+
+type Store = {
+    input: {
+        path: string;
+        url: string;
+    };
+    output: {
+        path: string;
+        // url: string;
+    };
+};
 
 export default component$(() => {
-    return <div>No Audio</div>;
+    const { input, output } = useStore<Store>({
+        input: {
+            path: "",
+            url: "",
+        },
+        output: {
+            path: "",
+            // url: "",
+        },
+    });
+
+    return (
+        <>
+            <video
+                class="vid"
+                src={input.url}
+                controls={Boolean(input.url)}
+            ></video>
+            <VideoPicker
+                onChange$={async (file) => {
+                    if (file) {
+                        input.path = file;
+                        input.url = await createFileURL(file);
+                    }
+                }}
+            />
+            <button
+                class="btn"
+                onClick$={async () => {
+                    const outputFile = await ffaudioOnly(input.path);
+                    output.path = outputFile;
+                    // output.url = await createFileURL(outputFile);
+                }}
+            >
+                Pull Audio
+            </button>
+            {output.path && (
+                <p style={{ textAlign: "center" }}>
+                    File Created @ {output.path}
+                </p>
+            )}
+        </>
+    );
 });
 
 export const head: DocumentHead = {
-    title: "Welcome to Qwik",
-    meta: [
-        {
-            name: "description",
-            content: "Qwik site description",
-        },
-    ],
+    title: "Pull Audio from file",
 };

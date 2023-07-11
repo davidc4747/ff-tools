@@ -31,7 +31,7 @@ const VideoPicker = component$((props: PropTypes): JSX.Element => {
                     const file = await openVideoPicker();
                     if (file) {
                         filePath.value = file;
-                        props.onChange$(filePath.value);
+                        await props.onChange$(filePath.value);
                     }
                 }}
             >

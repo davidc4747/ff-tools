@@ -5,7 +5,7 @@ use std::{path::Path, process::Command};
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![ffgif, ffmin])
+        .invoke_handler(tauri::generate_handler![ffgif, ffmin, ffaudio_only])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -79,6 +79,22 @@ fn ffmin(input_file: &str, resolution: &str, fps: u8) -> String {
                 "480" => "hd480",
                 _ => "",
             },
+            &output_file.to_string(),
+        ])
+        .output()
+        .expect("failed to execute ffmpeg command");
+
+    output_file.into()
+}
+
+#[tauri::command]
+fn ffaudio_only(input_file: &str) -> String {
+    let output_file = replace_extention(input_file, "mp3");
+    Command::new(FFMPEG_PATH)
+        .args([
+            "-y",
+            "-i",
+            &input_file.to_string(),
             &output_file.to_string(),
         ])
         .output()

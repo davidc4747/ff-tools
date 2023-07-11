@@ -49,7 +49,7 @@ export async function ffaudioOnly(inputFile: string): Promise<string> {
  */
 export async function createFileURL(
     path: string,
-    type: string = "" //"image/gif"
+    type: string = ""
 ): Promise<string> {
     const arrayBuffer = await readBinaryFile(path);
     const blob = new Blob([new Uint8Array(arrayBuffer)], {
