@@ -1,16 +1,4 @@
 /* ======================== *\
-    #Preview Pane
-\* ======================== */
-
-.inputVideo,
-.outputPreview {
-    width: 100%;
-    min-width: 480px;
-    max-width: 720px;
-    border: 1px solid var(--black);
-}
-
-/* ======================== *\
     #Form
 \* ======================== */
 

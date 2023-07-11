@@ -1,11 +1,6 @@
 import { component$, useSignal, useStore, useTask$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import {
-    inputVideo,
-    outputPreview,
-    form,
-    videoPicker,
-} from "./ffgif.module.css";
+import { form, videoPicker } from "./ffgif.module.css";
 import VideoPicker from "~/components/video-picker/video-picker";
 import { ffgif, createFileURL } from "~/services/tauri-helpers";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
@@ -59,7 +54,7 @@ export default component$(() => {
     return (
         <>
             <video
-                class={inputVideo}
+                class="vid"
                 controls={!!store.input.url}
                 src={store.input.url}
             ></video>
@@ -122,7 +117,7 @@ export default component$(() => {
                 <>
                     <img
                         ref={outputElem}
-                        class={outputPreview}
+                        class="vid"
                         src={store.output.url}
                         alt="output Gif"
                         width={480}

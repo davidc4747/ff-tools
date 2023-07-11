@@ -18,8 +18,14 @@
 }
 .lnk:hover,
 .lnk:focus {
-    background-color: var(--grey-600);
+    background-color: var(--grey-500);
 }
 .selected {
+    background-color: var(--grey-600);
+    border-bottom-color: var(--primary-100);
+}
+.selected:hover,
+.selected:focus {
+    background-color: var(--grey-600);
     border-bottom-color: var(--primary-100);
 }

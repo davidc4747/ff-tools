@@ -1,6 +1,6 @@
 import { component$, useStore } from "@builder.io/qwik";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
-import { inputFile, form } from "./ffmin.module.css";
+import { form } from "./ffmin.module.css";
 import type { Resolution } from "~/services/types";
 import { ffmin } from "~/services/tauri-helpers";
 import VideoPicker from "~/components/video-picker/video-picker";
@@ -33,7 +33,7 @@ export default component$(() => {
     return (
         <>
             <video
-                class={inputFile}
+                class="vid"
                 src={store.input.url}
                 controls={Boolean(store.input.url)}
             ></video>

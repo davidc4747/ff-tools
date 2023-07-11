@@ -140,3 +140,16 @@ ol {
     width: 72px;
     text-align: right;
 }
+
+/* ------------------------ *\
+    #Video
+\* ------------------------ */
+
+.vid {
+    align-self: center;
+
+    width: 100%;
+    min-width: 480px;
+    max-width: 720px;
+    border: 1px solid var(--black);
+}
