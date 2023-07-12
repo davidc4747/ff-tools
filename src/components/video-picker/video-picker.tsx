@@ -10,11 +10,12 @@ import { videoPicker, file, browse } from "./video-picker.module.css";
 
 type PropTypes = {
     class?: ClassList;
+    value?: string;
     onChange$: PropFunction<(file: string | null) => void>;
 };
 
 const VideoPicker = component$((props: PropTypes): JSX.Element => {
-    const filePath = useSignal("");
+    const filePath = useSignal(props.value ?? "");
 
     return (
         <div class={[props.class, videoPicker]}>

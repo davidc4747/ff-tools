@@ -1,17 +1,14 @@
-import { component$, useStore } from "@builder.io/qwik";
+import { component$, useContext, useStore } from "@builder.io/qwik";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { form } from "./ffmin.module.css";
 import type { Resolution } from "~/services/types";
 import { ffmin } from "~/services/tauri-helpers";
 import VideoPicker from "~/components/video-picker/video-picker";
 import ResolutionPicker from "~/components/resolution-picker/resolution-picker";
+import { InputFileContext } from "../layout";
 
 type Store = {
     resolution: Resolution;
-    input: {
-        path: string;
-        url: string;
-    };
     output: {
         path: string;
         // url: string;
@@ -21,38 +18,37 @@ type Store = {
 export default component$(() => {
     const store = useStore<Store>({
         resolution: "480",
-        input: {
-            path: "",
-            url: "",
-        },
         output: {
             path: "",
             // url: "",
         },
     });
+    const input = useContext(InputFileContext);
+
     return (
         <>
             <video
                 class="vid"
-                src={store.input.url}
-                controls={Boolean(store.input.url)}
+                src={input.url}
+                controls={Boolean(input.url)}
             ></video>
             <form
                 class={form}
                 preventdefault:submit
                 onSubmit$={async () => {
                     const outputFile = await ffmin(
-                        store.input.path,
+                        input.path,
                         store.resolution
                     );
                     store.output.path = outputFile;
                 }}
             >
                 <VideoPicker
+                    value={input.path}
                     onChange$={(file) => {
                         if (file) {
-                            store.input.path = file;
-                            store.input.url = convertFileSrc(file);
+                            input.path = file;
+                            input.url = convertFileSrc(file);
                         }
                     }}
                 />

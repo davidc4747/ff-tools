@@ -18,7 +18,7 @@ const Navigation = component$(() => {
     ];
 
     return (
-        <nav class={navigation} onClick$={() => console.log(url.pathname)}>
+        <nav class={navigation}>
             {allLinks.map(({ href, text }, index) => (
                 <Link
                     key={index}

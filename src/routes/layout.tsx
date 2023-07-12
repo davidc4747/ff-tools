@@ -1,4 +1,10 @@
-import { component$, Slot } from "@builder.io/qwik";
+import {
+    component$,
+    createContextId,
+    Slot,
+    useContextProvider,
+    useStore,
+} from "@builder.io/qwik";
 import { type RequestHandler } from "@builder.io/qwik-city";
 import { main } from "./layout.module.css";
 import Navigation from "../components/navigation/navigation";
@@ -14,7 +20,20 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
     });
 };
 
+type InputFile = {
+    path: string;
+    url: string;
+};
+
+export const InputFileContext = createContextId<InputFile>("inputFile");
+
 export default component$(() => {
+    const input = useStore<InputFile>({
+        path: "",
+        url: "",
+    });
+    useContextProvider(InputFileContext, input);
+
     return (
         <>
             <Navigation />

@@ -1,13 +1,10 @@
-import { component$, useStore } from "@builder.io/qwik";
+import { component$, useContext, useStore } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import VideoPicker from "~/components/video-picker/video-picker";
 import { ffaudioOnly, createFileURL } from "~/services/tauri-helpers";
+import { InputFileContext } from "../layout";
 
 type Store = {
-    input: {
-        path: string;
-        url: string;
-    };
     output: {
         path: string;
         // url: string;
@@ -15,16 +12,14 @@ type Store = {
 };
 
 export default component$(() => {
-    const { input, output } = useStore<Store>({
-        input: {
-            path: "",
-            url: "",
-        },
+    const { output } = useStore<Store>({
         output: {
             path: "",
             // url: "",
         },
     });
+
+    const input = useContext(InputFileContext);
 
     return (
         <>
@@ -34,6 +29,7 @@ export default component$(() => {
                 controls={Boolean(input.url)}
             ></video>
             <VideoPicker
+                value={input.path}
                 onChange$={async (file) => {
                     if (file) {
                         input.path = file;

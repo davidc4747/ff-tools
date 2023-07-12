@@ -1,20 +1,22 @@
-import { component$, useSignal, useStore, useTask$ } from "@builder.io/qwik";
+import {
+    component$,
+    useContext,
+    useSignal,
+    useStore,
+    useTask$,
+} from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { form, videoPicker } from "./ffgif.module.css";
 import VideoPicker from "~/components/video-picker/video-picker";
 import { ffgif, createFileURL } from "~/services/tauri-helpers";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
+import { InputFileContext } from "./layout";
 
 type OutputStatus = "Initial" | "Loading" | "Ready";
 
 type Store = {
     startTime: number;
     duration: number;
-
-    input: {
-        path: string;
-        url: string;
-    };
 
     outputStatus: OutputStatus;
     output: {
@@ -29,17 +31,14 @@ export default component$(() => {
         startTime: 0,
         duration: 0,
 
-        input: {
-            path: "",
-            url: "",
-        },
-
         outputStatus: "Initial",
         output: {
             path: "",
             url: "",
         },
     });
+
+    const input = useContext(InputFileContext);
 
     useTask$(({ track }) => {
         track(() => outputElem.value);
@@ -53,11 +52,7 @@ export default component$(() => {
 
     return (
         <>
-            <video
-                class="vid"
-                controls={!!store.input.url}
-                src={store.input.url}
-            ></video>
+            <video class="vid" controls={!!input.url} src={input.url}></video>
             <form
                 class={form}
                 preventdefault:submit
@@ -69,7 +64,7 @@ export default component$(() => {
 
                     // Wait for ffmpeg to procces the vide
                     const path = await ffgif(
-                        store.input.path,
+                        input.path,
                         store.startTime,
                         store.duration
                     );
@@ -80,10 +75,11 @@ export default component$(() => {
             >
                 <VideoPicker
                     class={videoPicker}
+                    value={input.path}
                     onChange$={(file: string | null) => {
                         if (file) {
-                            store.input.path = file;
-                            store.input.url = convertFileSrc(file);
+                            input.path = file;
+                            input.url = convertFileSrc(file);
                         }
                     }}
                 />
@@ -131,11 +127,5 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-    title: "Welcome to Qwik",
-    meta: [
-        {
-            name: "description",
-            content: "Qwik site description",
-        },
-    ],
+    title: "Convert Video to Gif",
 };
