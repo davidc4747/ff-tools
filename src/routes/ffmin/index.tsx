@@ -7,7 +7,7 @@ import VideoPicker from "~/components/video-picker/video-picker";
 import ResolutionPicker from "~/components/resolution-picker/resolution-picker";
 import { InputFileContext } from "../layout";
 
-type Store = {
+type FormData = {
     resolution: Resolution;
     output: {
         path: string;
@@ -16,7 +16,7 @@ type Store = {
 };
 
 export default component$(() => {
-    const store = useStore<Store>({
+    const formdata = useStore<FormData>({
         resolution: "480",
         output: {
             path: "",
@@ -38,9 +38,9 @@ export default component$(() => {
                 onSubmit$={async () => {
                     const outputFile = await ffmin(
                         input.path,
-                        store.resolution
+                        formdata.resolution
                     );
-                    store.output.path = outputFile;
+                    formdata.output.path = outputFile;
                 }}
             >
                 <VideoPicker
@@ -53,15 +53,15 @@ export default component$(() => {
                     }}
                 />
                 <ResolutionPicker
-                    value={store.resolution}
+                    value={formdata.resolution}
                     onChange$={(res) => {
-                        store.resolution = res;
+                        formdata.resolution = res;
                     }}
                 />
                 <button class={["btn"]}>Minify Video</button>
             </form>
 
-            {store.output.path && <p>{store.output.path}</p>}
+            {formdata.output.path && <p>{formdata.output.path}</p>}
         </>
     );
 });

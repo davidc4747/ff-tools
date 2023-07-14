@@ -4,7 +4,7 @@ import VideoPicker from "~/components/video-picker/video-picker";
 import { ffaudioOnly, createFileURL } from "~/services/tauri-helpers";
 import { InputFileContext } from "../layout";
 
-type Store = {
+type FormData = {
     output: {
         path: string;
         // url: string;
@@ -12,7 +12,7 @@ type Store = {
 };
 
 export default component$(() => {
-    const { output } = useStore<Store>({
+    const { output } = useStore<FormData>({
         output: {
             path: "",
             // url: "",

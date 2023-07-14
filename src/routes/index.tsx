@@ -14,7 +14,7 @@ import { InputFileContext } from "./layout";
 
 type OutputStatus = "Initial" | "Loading" | "Ready";
 
-type Store = {
+type FormData = {
     startTime: number;
     duration: number;
 
@@ -27,7 +27,7 @@ type Store = {
 
 export default component$(() => {
     const outputElem = useSignal<HTMLImageElement>();
-    const store = useStore<Store>({
+    const formdata = useStore<FormData>({
         startTime: 0,
         duration: 0,
 
@@ -58,19 +58,19 @@ export default component$(() => {
                 preventdefault:submit
                 onSubmit$={async function () {
                     // Clear Data
-                    store.output.path = "";
-                    store.output.url = "";
-                    store.outputStatus = "Loading";
+                    formdata.output.path = "";
+                    formdata.output.url = "";
+                    formdata.outputStatus = "Loading";
 
                     // Wait for ffmpeg to procces the vide
                     const path = await ffgif(
                         input.path,
-                        store.startTime,
-                        store.duration
+                        formdata.startTime,
+                        formdata.duration
                     );
-                    store.output.path = path;
-                    store.output.url = await createFileURL(path);
-                    store.outputStatus = "Ready";
+                    formdata.output.path = path;
+                    formdata.output.url = await createFileURL(path);
+                    formdata.outputStatus = "Ready";
                 }}
             >
                 <VideoPicker
@@ -90,8 +90,10 @@ export default component$(() => {
                         class="num"
                         type="number"
                         min={0}
-                        value={store.startTime}
-                        onChange$={(e) => (store.startTime = +e.target.value)}
+                        value={formdata.startTime}
+                        onChange$={(e) =>
+                            (formdata.startTime = +e.target.value)
+                        }
                     ></input>
                 </label>
                 <label>
@@ -100,26 +102,31 @@ export default component$(() => {
                         class="num"
                         type="number"
                         min={0}
-                        value={store.duration}
-                        onChange$={(e) => (store.duration = +e.target.value)}
+                        value={formdata.duration}
+                        onChange$={(e) => (formdata.duration = +e.target.value)}
                     ></input>
                 </label>
-                <button class="btn" disabled={store.outputStatus === "Loading"}>
-                    {store.outputStatus === "Loading" ? "Loading..." : "Submit"}
+                <button
+                    class="btn"
+                    disabled={formdata.outputStatus === "Loading"}
+                >
+                    {formdata.outputStatus === "Loading"
+                        ? "Loading..."
+                        : "Submit"}
                 </button>
             </form>
 
-            {store.outputStatus === "Ready" && (
+            {formdata.outputStatus === "Ready" && (
                 <>
                     <img
                         ref={outputElem}
                         class="vid"
-                        src={store.output.url}
+                        src={formdata.output.url}
                         alt="output Gif"
                         width={480}
                         height={undefined}
                     />
-                    <p>{store.output.path}</p>
+                    <p>{formdata.output.path}</p>
                 </>
             )}
         </>
