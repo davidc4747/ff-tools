@@ -1,0 +1,47 @@
+/* ======================== *\
+    # Notifications
+\* ======================== */
+
+.noteList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+
+    position: fixed;
+    top: 3rem;
+
+    width: 100%;
+    z-index: 10;
+    pointer-events: none;
+    overflow: none;
+}
+
+.noteItem {
+    padding: 1rem;
+    border: 1px solid var(--black);
+
+    border-radius: 8px;
+    box-shadow: 0 0 15px 0 var(--black);
+
+    font-weight: bold;
+    background-color: var(--primary-100);
+}
+.noteItem:first-child {
+    animation: 1s fadeOut 3s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+.noteItem:hover,
+.noteItem:focus {
+    animation-play-state: paused;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}

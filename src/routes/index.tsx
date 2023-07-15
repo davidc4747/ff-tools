@@ -10,7 +10,8 @@ import { form, videoPicker } from "./ffgif.module.css";
 import VideoPicker from "~/components/video-picker/video-picker";
 import { ffgif, createFileURL } from "~/services/tauri-helpers";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
-import { InputFileContext } from "./layout";
+import { inputFileContext } from "./layout";
+import { useNotification } from "~/components/notifications/notifications";
 
 type OutputStatus = "Initial" | "Loading" | "Ready";
 
@@ -26,6 +27,7 @@ type FormData = {
 };
 
 export default component$(() => {
+    const addNotification = useNotification();
     const outputElem = useSignal<HTMLImageElement>();
     const formdata = useStore<FormData>({
         startTime: 0,
@@ -38,7 +40,7 @@ export default component$(() => {
         },
     });
 
-    const input = useContext(InputFileContext);
+    const input = useContext(inputFileContext);
 
     useTask$(({ track }) => {
         track(() => outputElem.value);
@@ -71,6 +73,7 @@ export default component$(() => {
                     formdata.output.path = path;
                     formdata.output.url = await createFileURL(path);
                     formdata.outputStatus = "Ready";
+                    addNotification(`File created @ ${path}`);
                 }}
             >
                 <VideoPicker
@@ -126,7 +129,6 @@ export default component$(() => {
                         width={480}
                         height={undefined}
                     />
-                    <p>{formdata.output.path}</p>
                 </>
             )}
         </>

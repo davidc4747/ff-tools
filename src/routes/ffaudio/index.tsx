@@ -1,25 +1,13 @@
-import { component$, useContext, useStore } from "@builder.io/qwik";
+import { component$, useContext } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import VideoPicker from "~/components/video-picker/video-picker";
 import { ffaudioOnly, createFileURL } from "~/services/tauri-helpers";
-import { InputFileContext } from "../layout";
-
-type FormData = {
-    output: {
-        path: string;
-        // url: string;
-    };
-};
+import { inputFileContext } from "../layout";
+import { useNotification } from "~/components/notifications/notifications";
 
 export default component$(() => {
-    const { output } = useStore<FormData>({
-        output: {
-            path: "",
-            // url: "",
-        },
-    });
-
-    const input = useContext(InputFileContext);
+    const addNotification = useNotification();
+    const input = useContext(inputFileContext);
 
     return (
         <>
@@ -41,17 +29,11 @@ export default component$(() => {
                 class="btn"
                 onClick$={async () => {
                     const outputFile = await ffaudioOnly(input.path);
-                    output.path = outputFile;
-                    // output.url = await createFileURL(outputFile);
+                    addNotification(`File created @ ${outputFile}`);
                 }}
             >
                 Pull Audio
             </button>
-            {output.path && (
-                <p style={{ textAlign: "center" }}>
-                    File Created @ {output.path}
-                </p>
-            )}
         </>
     );
 });

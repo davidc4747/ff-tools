@@ -8,6 +8,9 @@ import {
 import { type RequestHandler } from "@builder.io/qwik-city";
 import { main } from "./layout.module.css";
 import Navigation from "../components/navigation/navigation";
+import Notifications, {
+    useNotificationProvider,
+} from "~/components/notifications/notifications";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
     // Control caching for this request for best performance and to reduce hosting costs:
@@ -25,18 +28,23 @@ type InputFile = {
     url: string;
 };
 
-export const InputFileContext = createContextId<InputFile>("inputFile");
+export const inputFileContext = createContextId<InputFile>("inputFile");
 
 export default component$(() => {
+    // Video InputFile
     const input = useStore<InputFile>({
         path: "",
         url: "",
     });
-    useContextProvider(InputFileContext, input);
+    useContextProvider(inputFileContext, input);
+
+    // Notifications
+    useNotificationProvider();
 
     return (
         <>
             <Navigation />
+            <Notifications />
             <main class={main}>
                 <Slot />
             </main>

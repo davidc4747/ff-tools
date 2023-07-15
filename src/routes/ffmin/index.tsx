@@ -5,25 +5,19 @@ import type { Resolution } from "~/services/types";
 import { ffmin } from "~/services/tauri-helpers";
 import VideoPicker from "~/components/video-picker/video-picker";
 import ResolutionPicker from "~/components/resolution-picker/resolution-picker";
-import { InputFileContext } from "../layout";
+import { inputFileContext } from "../layout";
+import { useNotification } from "~/components/notifications/notifications";
 
 type FormData = {
     resolution: Resolution;
-    output: {
-        path: string;
-        // url: string;
-    };
 };
 
 export default component$(() => {
+    const addNotification = useNotification();
+    const input = useContext(inputFileContext);
     const formdata = useStore<FormData>({
         resolution: "480",
-        output: {
-            path: "",
-            // url: "",
-        },
     });
-    const input = useContext(InputFileContext);
 
     return (
         <>
@@ -40,7 +34,7 @@ export default component$(() => {
                         input.path,
                         formdata.resolution
                     );
-                    formdata.output.path = outputFile;
+                    addNotification(`File created @ ${outputFile}`);
                 }}
             >
                 <VideoPicker
@@ -58,10 +52,8 @@ export default component$(() => {
                         formdata.resolution = res;
                     }}
                 />
-                <button class={["btn"]}>Minify Video</button>
+                <button class="btn">Minify Video</button>
             </form>
-
-            {formdata.output.path && <p>{formdata.output.path}</p>}
         </>
     );
 });
