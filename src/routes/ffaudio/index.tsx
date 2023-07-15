@@ -1,40 +1,24 @@
 import { component$, useContext } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import VideoPicker from "~/components/video-picker/video-picker";
-import { ffaudioOnly, createFileURL } from "~/services/tauri-helpers";
+import { form } from "./ffaudio.module.css";
+import { ffaudioOnly } from "~/services/tauri-helpers";
 import { inputFileContext } from "../layout";
 import { useNotification } from "~/components/notifications/notifications";
+import VideoForm from "~/components/video-form/video-form";
 
 export default component$(() => {
     const addNotification = useNotification();
     const input = useContext(inputFileContext);
 
     return (
-        <>
-            <video
-                class="vid"
-                src={input.url}
-                controls={Boolean(input.url)}
-            ></video>
-            <VideoPicker
-                value={input.path}
-                onChange$={async (file) => {
-                    if (file) {
-                        input.path = file;
-                        input.url = await createFileURL(file);
-                    }
-                }}
-            />
-            <button
-                class="btn"
-                onClick$={async () => {
-                    const outputFile = await ffaudioOnly(input.path);
-                    addNotification(`File created @ ${outputFile}`);
-                }}
-            >
-                Pull Audio
-            </button>
-        </>
+        <VideoForm
+            class={form}
+            submitText="Pull Audio"
+            onSubmit$={async () => {
+                const outputFile = await ffaudioOnly(input.path);
+                addNotification(`File created @ ${outputFile}`);
+            }}
+        />
     );
 });
 

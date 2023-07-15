@@ -2,10 +2,11 @@
     padding: 0 1rem;
 
     display: flex;
-    /* gap: 1rem; */
     text-align: center;
 
     position: sticky;
+    top: 0;
+    z-index: 5;
 
     color: var(--text-inverted);
     background-color: var(--grey-400);

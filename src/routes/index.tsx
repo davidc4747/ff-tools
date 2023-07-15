@@ -6,20 +6,16 @@ import {
     useTask$,
 } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { form, videoPicker } from "./ffgif.module.css";
-import VideoPicker from "~/components/video-picker/video-picker";
+import { form } from "./ffgif.module.css";
 import { ffgif, createFileURL } from "~/services/tauri-helpers";
-import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { inputFileContext } from "./layout";
 import { useNotification } from "~/components/notifications/notifications";
-
-type OutputStatus = "Initial" | "Loading" | "Ready";
+import VideoForm from "~/components/video-form/video-form";
 
 type FormData = {
     startTime: number;
     duration: number;
 
-    outputStatus: OutputStatus;
     output: {
         path: string;
         url: string;
@@ -28,23 +24,21 @@ type FormData = {
 
 export default component$(() => {
     const addNotification = useNotification();
-    const outputElem = useSignal<HTMLImageElement>();
+    const input = useContext(inputFileContext);
+    const outputPreview = useSignal<HTMLImageElement>();
     const formdata = useStore<FormData>({
         startTime: 0,
         duration: 0,
 
-        outputStatus: "Initial",
         output: {
             path: "",
             url: "",
         },
     });
 
-    const input = useContext(inputFileContext);
-
     useTask$(({ track }) => {
-        track(() => outputElem.value);
-        const img = outputElem.value;
+        track(() => outputPreview.value);
+        const img = outputPreview.value;
         if (img) {
             img.onload = function () {
                 img.scrollIntoView({ behavior: "smooth" });
@@ -54,15 +48,12 @@ export default component$(() => {
 
     return (
         <>
-            <video class="vid" controls={!!input.url} src={input.url}></video>
-            <form
+            <VideoForm
                 class={form}
-                preventdefault:submit
                 onSubmit$={async function () {
                     // Clear Data
                     formdata.output.path = "";
                     formdata.output.url = "";
-                    formdata.outputStatus = "Loading";
 
                     // Wait for ffmpeg to procces the vide
                     const path = await ffgif(
@@ -72,21 +63,9 @@ export default component$(() => {
                     );
                     formdata.output.path = path;
                     formdata.output.url = await createFileURL(path);
-                    formdata.outputStatus = "Ready";
-                    addNotification(`File created @ ${path}`);
+                    addNotification(`File Created @ ${path}`);
                 }}
             >
-                <VideoPicker
-                    class={videoPicker}
-                    value={input.path}
-                    onChange$={(file: string | null) => {
-                        if (file) {
-                            input.path = file;
-                            input.url = convertFileSrc(file);
-                        }
-                    }}
-                />
-
                 <label>
                     Start Time:{" "}
                     <input
@@ -109,23 +88,15 @@ export default component$(() => {
                         onChange$={(e) => (formdata.duration = +e.target.value)}
                     ></input>
                 </label>
-                <button
-                    class="btn"
-                    disabled={formdata.outputStatus === "Loading"}
-                >
-                    {formdata.outputStatus === "Loading"
-                        ? "Loading..."
-                        : "Submit"}
-                </button>
-            </form>
+            </VideoForm>
 
-            {formdata.outputStatus === "Ready" && (
+            {formdata.output.path && (
                 <>
                     <img
-                        ref={outputElem}
+                        ref={outputPreview}
                         class="vid"
                         src={formdata.output.url}
-                        alt="output Gif"
+                        alt="Output Preview"
                         width={480}
                         height={undefined}
                     />

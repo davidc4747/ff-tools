@@ -1,21 +1,3 @@
-/**
- * WHAT IS THIS FILE?
- *
- * Globally applied styles. No matter which components are in the page or matching route,
- * the styles in here will be applied to the Document, without any sort of CSS scoping.
- *
- */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-tab-size: 4;
-    -o-tab-size: 4;
-    tab-size: 4;
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
-}
-
 /* ======================== *\
     #Variables
 \* ======================== */
@@ -51,19 +33,15 @@ html {
     box-sizing: border-box;
 }
 
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-::-webkit-scrollbar-track {
-    background-color: var(--grey-400);
-}
-::-webkit-scrollbar-thumb {
-    background-color: var(--primary-100);
-    border-radius: 8px;
-}
-::-webkit-scrollbar-corner {
-    background-color: transparent;
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
 }
 
 html,
@@ -79,6 +57,25 @@ body {
     line-height: inherit;
     color: var(--text);
     background-color: var(--background);
+}
+
+/* ------------------------ *\
+    #Scroll bar
+\* ------------------------ */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background-color: var(--grey-400);
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--primary-100);
+    border-radius: 8px;
+}
+::-webkit-scrollbar-corner {
+    background-color: transparent;
 }
 
 /* ======================== *\
@@ -101,7 +98,6 @@ ol {
     #Components
 \* ======================== */
 
-/* All Form Elements */
 .btn,
 .txt,
 .num {
@@ -129,6 +125,13 @@ ol {
     transition: color 250ms ease-out, background-color 250ms ease-out;
 }
 
+.btn:disabled {
+    background-color: var(--grey-200);
+}
+.btn:disabled:hover {
+    cursor: not-allowed;
+}
+
 /* ------------------------- *\
     #Inputs
 \* ------------------------- */
@@ -152,4 +155,12 @@ ol {
     min-width: 480px;
     max-width: 720px;
     border: 1px solid var(--black);
+}
+
+/* ======================== *\
+    #Helpers
+\* ======================== */
+
+.w-full {
+    width: 100%;
 }
