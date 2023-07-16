@@ -140,7 +140,8 @@ ol {
 }
 
 .num {
-    width: 72px;
+    padding: 0.6rem 0.3rem;
+    width: 64px;
     text-align: right;
 }
 

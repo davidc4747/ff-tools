@@ -18,7 +18,7 @@ const FFMPEG_PATH: &str = "../public/ffmpeg";
 // const FFPROBE_PATH: &str =  "../public/ffprobe";
 
 #[tauri::command]
-fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
+fn ffgif(input_file: &str, start_time: f32, duration: f32) -> String {
     const FPS: u8 = 10;
     const RESOLUTION: u16 = 480;
 
@@ -29,7 +29,7 @@ fn ffgif(input_file: &str, start_time: u32, duration: u32) -> String {
     );
 
     // IF Both values are 0 Just use the Full Length
-    if start_time == 0 && duration == 0 {
+    if start_time == 0.0 && duration == 0.0 {
         Command::new(FFMPEG_PATH)
             .args([
                 "-y", // Override

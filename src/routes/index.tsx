@@ -55,6 +55,7 @@ export default component$(() => {
                     class="num"
                     type="number"
                     min={0}
+                    step={0.01}
                     value={formdata.startTime}
                     onChange$={(e) => (formdata.startTime = +e.target.value)}
                 ></input>
@@ -65,6 +66,7 @@ export default component$(() => {
                     class="num"
                     type="number"
                     min={0}
+                    step={0.01}
                     value={formdata.duration}
                     onChange$={(e) => (formdata.duration = +e.target.value)}
                 ></input>
