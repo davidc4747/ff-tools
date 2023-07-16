@@ -34,9 +34,11 @@ const VideoForm = component$((props: PropTypes): JSX.Element => {
                 class={props.class}
                 preventdefault:submit
                 onSubmit$={async function () {
-                    outputStatus.value = "Loading";
-                    await props.onSubmit$();
-                    outputStatus.value = "Ready";
+                    if (input.path) {
+                        outputStatus.value = "Loading";
+                        await props.onSubmit$();
+                        outputStatus.value = "Ready";
+                    }
                 }}
             >
                 <VideoPicker
