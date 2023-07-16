@@ -26,9 +26,10 @@
 
     font-weight: bold;
     background-color: var(--primary-100);
+    pointer-events: auto;
 }
 .noteItem:first-child {
-    animation: 1s fadeOut 3s;
+    animation: 0.5s fadeOut 5s;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
 }
@@ -44,4 +45,17 @@
     to {
         opacity: 0;
     }
+}
+
+/* ------------------------ *\
+    #
+\* ------------------------ */
+
+.noteItem > button {
+    padding: 0;
+    border: none;
+
+    background-color: transparent;
+    text-decoration: underline;
+    cursor: pointer;
 }

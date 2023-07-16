@@ -1,6 +1,7 @@
 import type { JSX } from "@builder.io/qwik/jsx-runtime";
 import {
     $,
+    type JSXChildren,
     component$,
     createContextId,
     useContext,
@@ -9,6 +10,7 @@ import {
     useStore,
 } from "@builder.io/qwik";
 import { noteList, noteItem } from "./notifications.module.css";
+import { openFile } from "~/services/tauri-helpers";
 
 /* ======================== *\
     #Context
@@ -16,6 +18,7 @@ import { noteList, noteItem } from "./notifications.module.css";
 
 type Notification = {
     id: number;
+    type: "Text" | "FileCreated";
     text: string;
 };
 
@@ -24,11 +27,23 @@ const notificationContext = createContextId<Notification[]>("notification");
 export const useNotification = () => {
     const notificationId = useSignal(0);
     const notes = useContext(notificationContext);
-    const add = $((note: string) => {
+    const add = $((message: string) => {
         notificationId.value++;
-        notes.push({ id: notificationId.value, text: note });
+        notes.push({
+            id: notificationId.value,
+            type: "Text",
+            text: message,
+        });
     });
-    return add;
+    const fileCreated = $((filePath: string) => {
+        notificationId.value++;
+        notes.push({
+            id: notificationId.value,
+            type: "FileCreated",
+            text: filePath,
+        });
+    });
+    return { add, fileCreated };
 };
 
 export function useNotificationProvider() {
@@ -44,15 +59,15 @@ const Notifications = component$((): JSX.Element => {
     const notes = useContext(notificationContext);
     return (
         <ul class={noteList}>
-            {notes.map(({ id, text }, index) => (
+            {notes.map((note, index) => (
                 <li
                     class={noteItem}
-                    key={id}
+                    key={note.id}
                     onAnimationEnd$={() => {
                         notes.splice(index, 1);
                     }}
                 >
-                    {text}
+                    {renderNoteContent(note)}
                 </li>
             ))}
         </ul>
@@ -60,3 +75,26 @@ const Notifications = component$((): JSX.Element => {
 });
 
 export default Notifications;
+
+/* ------------------------ *\
+    #Render
+\* ------------------------ */
+
+function renderNoteContent(notification: Notification): JSXChildren {
+    switch (notification.type) {
+        case "Text":
+            return <>{notification.text}</>;
+
+        case "FileCreated":
+            return (
+                <>
+                    File Created @{" "}
+                    <button
+                        onClick$={async () => await openFile(notification.text)}
+                    >
+                        {notification.text}
+                    </button>
+                </>
+            );
+    }
+}

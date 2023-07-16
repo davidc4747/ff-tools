@@ -7,7 +7,7 @@ import { useNotification } from "~/components/notifications/notifications";
 import VideoForm from "~/components/video-form/video-form";
 
 export default component$(() => {
-    const addNotification = useNotification();
+    const { fileCreated } = useNotification();
     const input = useContext(inputFileContext);
 
     return (
@@ -16,7 +16,7 @@ export default component$(() => {
             submitText="Pull Audio"
             onSubmit$={async () => {
                 const outputFile = await ffaudioOnly(input.path);
-                addNotification(`File created @ ${outputFile}`);
+                fileCreated(outputFile);
             }}
         />
     );

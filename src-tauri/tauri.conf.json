@@ -29,6 +29,9 @@
             "path": {
                 "all": true
             },
+            "shell": {
+                "open": "^\\w+"
+            },
             "fs": {
                 "readFile": true,
                 "scope": [
@@ -87,7 +90,7 @@
             {
                 "fullscreen": false,
                 "width": 800,
-                "height": 600,
+                "height": 650,
                 "resizable": true,
                 "title": "ff-tools"
             }

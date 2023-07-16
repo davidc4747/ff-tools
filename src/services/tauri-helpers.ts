@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
+import { open } from "@tauri-apps/api/shell";
 import { readBinaryFile } from "@tauri-apps/api/fs";
 import type { Resolution } from "~/services/types";
 
@@ -56,4 +57,12 @@ export async function createFileURL(
         type,
     });
     return URL.createObjectURL(blob);
+}
+
+export async function openFile(file: string): Promise<void> {
+    // NOTE: path module NEEDS to be dynamically imported here
+    //      this ensure that the modules only executes on client-side [DC]
+    //      More info: https://github.com/tauri-apps/tauri/discussions/5271
+    const path = await import("@tauri-apps/api/path");
+    return await open(await path.normalize(file));
 }

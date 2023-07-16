@@ -12,7 +12,7 @@ type FormData = {
 };
 
 export default component$(() => {
-    const addNotification = useNotification();
+    const { fileCreated } = useNotification();
     const input = useContext(inputFileContext);
     const formdata = useStore<FormData>({
         resolution: "480",
@@ -24,7 +24,7 @@ export default component$(() => {
             submitText="Minify Video"
             onSubmit$={async () => {
                 const outputFile = await ffmin(input.path, formdata.resolution);
-                addNotification(`File created @ ${outputFile}`);
+                fileCreated(outputFile);
             }}
         >
             <ResolutionPicker
