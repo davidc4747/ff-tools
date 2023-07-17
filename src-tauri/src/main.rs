@@ -14,15 +14,12 @@ fn main() {
     #FFmpeg Commands
 \* ======================== */
 
-const FFMPEG_PATH: &str = "../public/ffmpeg";
-// const FFPROBE_PATH: &str =  "../public/ffprobe";
-
 #[tauri::command]
-fn ffgif(input_file: &str, start_time: f32, duration: f32) -> String {
+async fn ffgif(input_file: String, start_time: f32, duration: f32) -> String {
     const FPS: u8 = 10;
     const RESOLUTION: u16 = 480;
 
-    let output_file = replace_extention(input_file, "gif");
+    let output_file = replace_extention(&input_file, "gif");
     let video_filter = format!(
         "fps={},scale={}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse",
         FPS, RESOLUTION
@@ -30,77 +27,65 @@ fn ffgif(input_file: &str, start_time: f32, duration: f32) -> String {
 
     // IF Both values are 0 Just use the Full Length
     if start_time == 0.0 && duration == 0.0 {
-        Command::new(FFMPEG_PATH)
-            .args([
-                "-y", // Override
-                "-i",
-                &input_file,
-                "-vf",
-                &video_filter,
-                &output_file,
-            ])
-            .output()
-            .expect("failed to execute ffmpeg command");
+        ffmpeg(&[
+            "-y", // Override
+            "-i",
+            &input_file,
+            "-vf",
+            &video_filter,
+            &output_file,
+        ]);
     } else {
-        Command::new(FFMPEG_PATH)
-            .args([
-                "-ss",
-                &start_time.to_string(),
-                "-t",
-                &duration.to_string(),
-                "-y", // Override
-                "-i",
-                &input_file,
-                "-vf",
-                &video_filter,
-                &output_file,
-            ])
-            .output()
-            .expect("failed to execute ffmpeg command");
+        ffmpeg(&[
+            "-ss",
+            &start_time.to_string(),
+            "-t",
+            &duration.to_string(),
+            "-y", // Override
+            "-i",
+            &input_file,
+            "-vf",
+            &video_filter,
+            &output_file,
+        ]);
     }
 
-    output_file.into()
+    output_file
 }
 
 #[tauri::command]
-fn ffmin(input_file: &str, resolution: &str, fps: u8) -> String {
-    let output_file = replace_extention(input_file, "min.mp4");
-    Command::new(FFMPEG_PATH)
-        .args([
-            "-y",
-            "-i",
-            &input_file.to_string(),
-            "-r",
-            &fps.to_string(),
-            "-s",
-            match resolution {
-                "1080" => "hd1080",
-                "720" => "hd720",
-                "480" => "hd480",
-                _ => "",
-            },
-            &output_file.to_string(),
-        ])
-        .output()
-        .expect("failed to execute ffmpeg command");
+async fn ffmin(input_file: String, resolution: String, fps: u8) -> String {
+    let output_file = replace_extention(&input_file, "min.mp4");
+    ffmpeg(&[
+        "-y",
+        "-i",
+        &input_file,
+        "-r",
+        &fps.to_string(),
+        "-s",
+        match resolution.as_str() {
+            "1080" => "hd1080",
+            "720" => "hd720",
+            "480" => "hd480",
+            _ => "",
+        },
+        &output_file,
+    ]);
 
-    output_file.into()
+    output_file
 }
 
 #[tauri::command]
-fn ffaudio_only(input_file: &str) -> String {
-    let output_file = replace_extention(input_file, "mp3");
-    Command::new(FFMPEG_PATH)
-        .args([
-            "-y",
-            "-i",
-            &input_file.to_string(),
-            &output_file.to_string(),
-        ])
-        .output()
-        .expect("failed to execute ffmpeg command");
+async fn ffaudio_only(input_file: String) -> String {
+    let output_file = replace_extention(&input_file, "mp3");
+    ffmpeg(&[
+        "-y",
+        "-i",
+        &input_file.to_string(),
+        &output_file.to_string(),
+    ]);
 
-    output_file.into()
+    output_file
 }
 
 /* ------------------------ *\
@@ -113,4 +98,14 @@ fn replace_extention(file_path: &str, new_extention: &str) -> String {
         .to_str()
         .unwrap_or_default()
         .into()
+}
+
+const FFMPEG_PATH: &str = "../public/ffmpeg";
+// const FFPROBE_PATH: &str =  "../public/ffprobe";
+fn ffmpeg(args: &[&str]) -> () {
+    let _ = Command::new(FFMPEG_PATH)
+        .args(args)
+        .spawn()
+        .expect("failed to execute ffmpeg command")
+        .wait();
 }

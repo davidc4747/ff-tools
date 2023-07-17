@@ -8,7 +8,7 @@ import {
     type ClassList,
 } from "@builder.io/qwik";
 import { inputFileContext } from "~/routes/layout";
-import { createFileURL } from "~/services/tauri-helpers";
+import { convertFileSrc } from "@tauri-apps/api/tauri";
 import VideoPicker from "../video-picker/video-picker";
 
 /* ======================== *\
@@ -34,7 +34,7 @@ const VideoForm = component$((props: PropTypes): JSX.Element => {
                 class={props.class}
                 preventdefault:submit
                 onSubmit$={async function () {
-                    if (input.path) {
+                    if (input.path && outputStatus.value !== "Loading") {
                         outputStatus.value = "Loading";
                         await props.onSubmit$();
                         outputStatus.value = "Ready";
@@ -44,10 +44,10 @@ const VideoForm = component$((props: PropTypes): JSX.Element => {
                 <VideoPicker
                     class="w-full"
                     value={input.path}
-                    onChange$={async (file: string | null) => {
+                    onChange$={(file: string | null) => {
                         if (file) {
                             input.path = file;
-                            input.url = await createFileURL(file);
+                            input.url = convertFileSrc(file);
                         }
                     }}
                 />
@@ -56,7 +56,7 @@ const VideoForm = component$((props: PropTypes): JSX.Element => {
 
                 <button class="btn" disabled={outputStatus.value === "Loading"}>
                     {outputStatus.value === "Loading"
-                        ? "Loading..."
+                        ? "Processing Video..."
                         : props.submitText ?? "Submit"}
                 </button>
             </form>
