@@ -11,7 +11,7 @@ const Navigation = component$(() => {
     const { url } = useLocation();
 
     const allLinks: NavLink[] = [
-        { href: "/", text: "Convert a Gif" },
+        { href: "/", text: "Convert to Gif" },
         { href: "/ffmin/", text: "Minify Video" },
         { href: "/ffaudio/", text: "Audio Only" },
         // { href: "/compressed-dialog", text: "Compressed Dialog" },

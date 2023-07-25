@@ -39,6 +39,7 @@ export default component$(() => {
     return (
         <VideoForm
             class={form}
+            submitText="Create Gif"
             onSubmit$={async function () {
                 // Wait for ffmpeg to procces the vide
                 const path = await ffgif(

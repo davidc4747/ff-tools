@@ -5,7 +5,12 @@ import {
     type PropFunction,
     type QwikChangeEvent,
 } from "@builder.io/qwik";
-import { resolutionPicker, lbl, rdo } from "./resolution-picker.module.css";
+import {
+    resolutionPicker,
+    legend,
+    lbl,
+    rdo,
+} from "./resolution-picker.module.css";
 import type { Resolution } from "~/services/types";
 
 /* ======================== *\
@@ -27,6 +32,7 @@ const ResolutionPicker = component$((props: PropTypes): JSX.Element => {
 
     return (
         <fieldset class={resolutionPicker}>
+            <legend class={legend}>Choose a Resolution:</legend>
             {allResolutions.map((res, index) => (
                 <label key={index} class={lbl}>
                     <input
@@ -37,7 +43,7 @@ const ResolutionPicker = component$((props: PropTypes): JSX.Element => {
                         checked={res === props.value}
                         onChange$={handleChange}
                     />
-                    {res}
+                    {res}p
                 </label>
             ))}
         </fieldset>
