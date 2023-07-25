@@ -7,6 +7,7 @@
     "private": true,
     "scripts": {
         "start": "tauri dev",
+        "package": "tauri build",
         "dev": "vite --mode ssr",
         "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
         "build": "qwik build",
