@@ -7,7 +7,7 @@
         "distDir": "../dist"
     },
     "package": {
-        "productName": "ff-tools",
+        "productName": "FFTools",
         "version": "0.1.0"
     },
     "tauri": {
@@ -56,7 +56,7 @@
             },
             "externalBin": [],
             "icon": ["icons/fftools64x64.png", "icons/fftools.ico"],
-            "identifier": "ff-tools",
+            "identifier": "FFTools",
             "longDescription": "",
             "macOS": {
                 "entitlements": null,
@@ -65,7 +65,7 @@
                 "providerShortName": null,
                 "signingIdentity": null
             },
-            "resources": [],
+            "resources": ["../public/ffmpeg.exe", "../public/ffprobe.exe"],
             "shortDescription": "",
             "targets": "all",
             "windows": {
@@ -86,7 +86,7 @@
                 "width": 800,
                 "height": 650,
                 "resizable": true,
-                "title": "ff-tools"
+                "title": "FFTools"
             }
         ]
     }
