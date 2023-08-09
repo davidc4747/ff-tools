@@ -48,6 +48,11 @@ dist/
 build/
 output/
 
+# FFmpeg
+/public/ffmpeg.exe
+/public/ffprobe.exe
+
+
 # Serverless generated files
 .serverless/
 
